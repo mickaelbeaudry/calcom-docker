@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Preparing') {
             steps {
+                sh 'git submodule update --init --recursive'
                 echo 'Preparing database to build image'
                 sh 'docker compose up -d database'
             }
