@@ -17,7 +17,7 @@ pipeline {
                     --build-arg CALCOM_TELEMETRY_DISABLED='1' \
                     --build-arg NEXTAUTH_SECRET='mZAcmyuGf2kLjn2OPOhKQsoK0nLwLR8AsTSW3gRX8' \
                     --build-arg CALENDSO_ENCRYPTION_KEY='3MPc1LVtVKobejtnSv4d5fta8EJYSfLa' \
-                    --build-arg DATABASE_URL='postgresql://unicorn_user_123:magical_password_321@10.10.17.161:5432/calendso_db' \
+                    --build-arg DATABASE_URL='postgresql://unicorn_user_123:magical_password_321@10.10.17.101:5432/calendso_db' \
                     --build-arg BASE_URL='https://rendez-vous.aktioalta.com' .'''
             }
         }
