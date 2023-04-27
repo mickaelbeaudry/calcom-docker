@@ -29,5 +29,26 @@ pipeline {
                 sh 'echo -e "version: \'3.8\'\n$(cat docker-compose-generated.yml)" > docker-compose-generated.yml'
             }
         }
+
+
+    }
+
+    post {
+        always {
+            echo 'One way or another, I have finished'
+            sh 'docker compose down database'
+        }
+        success {
+            echo 'I succeeded!'
+        }
+        unstable {
+            echo 'I am unstable :/'
+        }
+        failure {
+            echo 'I failed :('
+        }
+        changed {
+            echo 'Things were different before...'
+        }
     }
 }
