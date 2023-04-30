@@ -2,13 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Preparing') {
-            steps {
-                sh 'git submodule update --init --recursive'
-                echo 'Preparing database to build image'
-                sh 'docker compose up -d database'
-            }
-        }
+
         stage('Compiling image') {
             steps {
                 sh '''docker build -t 10.10.17.161:5000/aktioalta-calendso:v2.7.8 \
