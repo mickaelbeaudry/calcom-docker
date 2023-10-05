@@ -1,0 +1,63 @@
+# Use postgres/example user/password credentials
+version: '3.7'
+
+services:
+  database:
+    image: postgres
+    volumes:
+      - /data/calendso/postgres/data:/var/lib/postgresql/data/
+    env_file: .env
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints: [node.hostname == docker-node-3]
+
+  calendso:
+    image: 10.10.17.161:5000/aktioalta-calendso:v2.6.6
+    networks:
+      - traefik-public
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DATABASE_HOST}/${POSTGRES_DB}
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'mikdns.aktioaltatraefik=true'
+        - 'traefik.http.routers.calendso.rule=Host(`rendez-vous.aktioalta.com`)'
+        - 'traefik.http.routers.calendso.entrypoints=web'
+        - 'traefik.http.services.calendso.loadbalancer.server.port=3000'
+        # TLS
+        - "traefik.http.routers.calendsos.rule=Host(`rendez-vous.aktioalta.com`)"
+        - "traefik.http.routers.calendsos.entrypoints=websecure"
+        - "traefik.http.routers.calendsos.tls.certresolver=letsencrypt"
+        # Redirect
+        - "traefik.http.routers.calendso.middlewares=https_redirect"
+        - "traefik.http.middlewares.calendso.redirectscheme.scheme=https"
+        # Authelia
+        - 'traefik.http.routers.calendsos.middlewares=authelia@docker'
+
+
+# Optional use of Prisma Studio. In production, comment out or remove the section below to prevent unwanted access to your database.
+#  studio:
+#    image: calendso/calendso:latest
+#    restart: always
+#    networks:
+#      - traefik-public
+#    ports:
+#      - 5555:5555
+#    env_file: .env
+#    environment:
+#      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DATABASE_HOST}/${POSTGRES_DB}
+#    command:
+#      - npx
+#      - prisma
+#      - studio
+# END SECTION: Optional use of Prisma Studio.
+
+
+networks:
+  traefik-public:
+    external: true
+    name: traefik
+
