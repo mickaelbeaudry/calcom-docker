@@ -36,7 +36,7 @@ pipeline {
     post {
         always {
             echo 'One way or another, I have finished'
-            sh 'docker compose down database'
+            sh 'docker compose down'
         }
         success {
             echo 'I succeeded!'
