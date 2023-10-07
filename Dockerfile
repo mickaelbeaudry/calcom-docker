@@ -21,6 +21,7 @@ COPY calcom/package.json calcom/yarn.lock calcom/.yarnrc.yml calcom/playwright.c
 COPY calcom/.yarn ./.yarn
 COPY calcom/apps/web ./apps/web
 COPY calcom/packages ./packages
+COPY calcom/tests ./tests
 
 RUN yarn config set httpTimeout 1200000 && \ 
     npx turbo prune --scope=@calcom/web --docker && \
@@ -67,4 +68,8 @@ ENV NEXT_PUBLIC_WEBAPP_URL=$NEXT_PUBLIC_WEBAPP_URL \
 
 ENV NODE_ENV production
 EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=30s --retries=5 \
+    CMD wget --spider http://localhost:3000 || exit 1
+
 CMD ["/calcom/scripts/start.sh"]
