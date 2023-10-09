@@ -6,12 +6,11 @@ pipeline {
             steps {
                 sh 'git submodule update --init --recursive'
                 echo 'Preparing database to build image'
-                sh 'docker compose up -d database'
             }
         }
         stage('Compiling image') {
             steps {
-                sh '''docker build -t 10.10.17.161:5000/aktioalta-calendso:v2.7.8 \
+                sh '''docker compose up -d databse && docker build -t 10.10.17.161:5000/aktioalta-calendso:v2.7.8 \
                     --build-arg NEXT_PUBLIC_WEBAPP_URL='https://rendez-vous.aktioalta.com' \
                     --build-arg NEXT_PUBLIC_LICENSE_CONSENT='agree' \
                     --build-arg CALCOM_TELEMETRY_DISABLED='1' \
