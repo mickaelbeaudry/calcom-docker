@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Compiling image') {
             steps {
-                sh '''docker compose up -d database && docker build -t 10.10.17.161:5000/aktioalta-calendso:v2.7.8 \
+                sh '''docker ps && docker compose up -d database && docker ps &&  docker build -t 10.10.17.161:5000/aktioalta-calendso:v2.7.8 \
                     --build-arg NEXT_PUBLIC_WEBAPP_URL='https://rendez-vous.aktioalta.com' \
                     --build-arg NEXT_PUBLIC_LICENSE_CONSENT='agree' \
                     --build-arg CALCOM_TELEMETRY_DISABLED='1' \
