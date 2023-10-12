@@ -6,8 +6,8 @@ pipeline {
             steps {
                 sh 'git submodule update --init --recursive'
                 echo 'Preparing database to build image'
-                sh 'docker system prune -a'
-                sh 'docker volume prune -a'
+                sh 'yes | docker system prune -a'
+                sh 'yes | docker volume prune -a'
                 sh 'docker compose up -d'
                 sh 'sleep 180'
                 sh 'docker compose down'
